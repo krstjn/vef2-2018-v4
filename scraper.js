@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-/* todo require og stilla dót */
 require('isomorphic-fetch');
 const cheerio = require('cheerio');
 const util = require('util');
