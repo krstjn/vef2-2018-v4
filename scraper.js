@@ -10,7 +10,7 @@ const client = redis.createClient({
 });
 
 client.on('connect', () => {
-  console.info('Connected to redis...', ' keys expire in: ', process.env.REDIS_EXPIRE, 'ms');
+  console.info('Connected to redis...', 'keys expire in:', process.env.REDIS_EXPIRE, 'seconds');
 });
 
 const asyncGet = util.promisify(client.get).bind(client);
