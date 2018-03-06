@@ -59,7 +59,7 @@ const departments = [
  * @returns {Promise} Promise sem mun innihalda gögn fyrir svið eða null ef það finnst ekki
  */
 async function getTests(slug) {
-  const cached = await asyncGet(slug);
+  const cached = await asyncGet(`vef2018:${slug}`);
   if (cached) {
     return JSON.parse(cached);
   }
@@ -94,7 +94,7 @@ async function getTests(slug) {
     tests.push(results);
   });
 
-  await asyncSet(slug, JSON.stringify(tests), 'EX', process.env.REDIS_EXPIRE);
+  await asyncSet(`vef2018:${slug}`, JSON.stringify(tests), 'EX', process.env.REDIS_EXPIRE);
   return tests;
 }
 
@@ -104,7 +104,7 @@ async function getTests(slug) {
  * @returns {Promise} Promise sem mun innihalda boolean um hvort cache hafi verið hreinsað eða ekki.
  */
 async function clearCache() {
-  const keys = await asyncKeys('*');
+  const keys = await asyncKeys('vef2018:*');
   let del = 0;
   if (keys.length > 0) {
     del = await asyncDel.apply(client, keys);
@@ -118,7 +118,7 @@ async function clearCache() {
  * @returns {Promise} Promise sem mun innihalda object með tölfræði um próf
  */
 async function getStats() {
-  const cached = await asyncGet('stats');
+  const cached = await asyncGet('vef2018:stats');
   if (cached) {
     return JSON.parse(cached);
   }
@@ -145,7 +145,7 @@ async function getStats() {
     numStudents: sum,
     averageStudents: avg,
   };
-  await asyncSet('stats', JSON.stringify(data), 'EX', process.env.REDIS_EXPIRE);
+  await asyncSet('vef2018:stats', JSON.stringify(data), 'EX', process.env.REDIS_EXPIRE);
 
   return data;
 }
